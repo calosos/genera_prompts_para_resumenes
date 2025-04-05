@@ -41,3 +41,12 @@ pytest_cache/
 # Custom files to ignore
 coursera_cookies.json
 git_aliases.sh
+
+# Ignorar todo el contenido de salida_descarga y salida_procesados,
+# pero mantener las carpetas en el repo
+
+salida_descarga/*
+!salida_descarga/.placeholder
+
+salida_procesados/*
+!salida_procesados/.placeholder
