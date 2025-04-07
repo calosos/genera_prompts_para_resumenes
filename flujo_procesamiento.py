@@ -6,6 +6,7 @@ from procesador_archivo_md import (
     aplicar_jerarquia,
     guardar_archivo_modificado
 )
+from genera_prompts_desde_archivo import generar_prompts_desde_archivo
 
 
 def procesar_archivo_guardado(nombre_archivo_original):
@@ -21,5 +22,10 @@ def procesar_archivo_guardado(nombre_archivo_original):
     subtitulos_actualizados = cargar_subtitulos_json()
     contenido_final = aplicar_jerarquia(contenido_limpio, subtitulos_actualizados)
 
-    guardar_archivo_modificado(nombre_procesado, contenido_final)
+    ruta_salida = guardar_archivo_modificado(nombre_procesado, contenido_final)
+
     print(f"✅ Archivo jerarquizado guardado en: {nombre_procesado}")
+
+    print("\n📚 Generando prompts a partir del archivo procesado...")
+    generar_prompts_desde_archivo(ruta_salida)
+

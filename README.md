@@ -1,6 +1,6 @@
-# 📘 Proyecto: Descarga y Procesamiento de Contenido de Coursera
+# 📘 Proyecto: Descarga, Procesamiento y Generación de Prompts desde Coursera
 
-Este proyecto permite automatizar la descarga de contenido de lecciones desde Coursera usando Selenium, limpiar el contenido para eliminar elementos irrelevantes, aplicar una jerarquía basada en subtítulos definidos, y guardar el contenido procesado en formato Markdown limpio.
+Este proyecto automatiza la descarga de contenido desde Coursera y genera prompts en formato Markdown a partir de la estructura jerarquizada del contenido de las lecciones.
 
 ---
 
@@ -11,7 +11,7 @@ Este proyecto permite automatizar la descarga de contenido de lecciones desde Co
 3. Limpia el contenido eliminando líneas innecesarias (duraciones, botones, etiquetas).
 4. Permite editar subtítulos que definen la jerarquía de secciones.
 5. Aplica estructura Markdown jerarquizada a partir de esos subtítulos.
-6. Guarda archivos procesados y listos para usar en Obsidian o Markdown viewer.
+6. Genera archivos `.md` con prompts para crear cheat sheets a partir del contenido estructurado.
 
 ---
 
@@ -34,7 +34,9 @@ pip install -r requirements.txt
 
 Ejecuta el script principal:
 
-    python main.py
+```bash
+python main.py
+```
 
 Elige una opción:
 
@@ -43,22 +45,25 @@ Elige una opción:
 
 Revisa y edita `subtitulos.json` si deseas cambiar la jerarquía de secciones.
 
-Presiona Enter para aplicar la jerarquía y guardar el archivo final.
+Presiona Enter para aplicar la jerarquía y generar los prompts.
 
 ---
 
 ## 🧱 Estructura de carpetas
 
-descarga_info/  
-├── main.py                       ← Menú principal e interacción  
-├── coursera_utils.py            ← Login, cookies, extracción con Selenium  
-├── procesador_archivo_md.py     ← Limpieza y jerarquía del contenido  
-├── flujo_procesamiento.py       ← Orquesta la limpieza y procesamiento  
-├── subtitulos.json              ← Define los encabezados jerárquicos  
-├── salida_descarga/             ← Contenido crudo descargado  
-│   └── .placeholder  
-├── salida_procesados/           ← Contenido limpio y jerarquizado  
-│   └── .placeholder  
+```
+descarga_info/
+├── main.py
+├── coursera_utils.py
+├── flujo_procesamiento.py
+├── procesador_archivo_md.py
+├── genera_prompts_desde_archivo.py
+├── subtitulos.json
+├── salida_descarga/
+├── salida_procesados/
+├── salida_limpia/
+├── prompts_generados/
+```
 
 ---
 
@@ -100,6 +105,11 @@ descarga_info/
 ┌──────────────────────────────┐
 │ Aplica jerarquía Markdown    │
 │ Guarda archivo final         │
+└────────────┬────────────────┘
+             ▼
+┌──────────────────────────────┐
+│ Genera prompts Markdown      │
+│ Guarda en prompts_generados/ │
 └──────────────────────────────┘
 ```
 
@@ -108,7 +118,7 @@ descarga_info/
 ## ✍️ Personalización
 
 - Edita el archivo `subtitulos.json` para definir los títulos o secciones que deben convertirse en `##` o `###`.
-- Puedes modificar `procesador_archivo_md.py` si deseas cambiar los patrones que se eliminan durante la limpieza.
+- Puedes modificar `procesador_archivo_md.py` o `genera_prompts_desde_archivo.py` para ajustar el formato de jerarquía o los prompts generados.
 
 ---
 

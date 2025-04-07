@@ -18,6 +18,7 @@ def guardar_archivo_modificado(nombre_original, contenido_modificado):
         with open(ruta_salida, "w", encoding="utf-8") as f:
             f.write(contenido_modificado)
         print(f"\n✅ Archivo procesado guardado en: {ruta_salida}")
+        return ruta_salida
     except Exception as e:
         print(f"❌ Error al guardar el archivo procesado: {e}")
 
