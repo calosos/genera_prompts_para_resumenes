@@ -54,3 +54,6 @@ salida_procesados/*
 
 salida_limpia/*
 !salida_limpia/.placeholder
+
+prompts_generados/*
+!prompts_generados/.placeholder
