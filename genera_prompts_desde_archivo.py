@@ -29,7 +29,7 @@ def extraer_temas_y_subtemas(lineas):
 
 
 def construir_prompt(titulo, subtemas):
-    prompt = f"""Quiero una cheat sheet sobre el tema: {titulo} con enfoque en Python.
+    prompt = f"""Quiero una cheat sheet sobre el tema: {titulo} .
 
 Debe incluir las siguientes secciones en formato Markdown:
 """
@@ -51,6 +51,8 @@ Debe incluir las siguientes secciones en formato Markdown:
 - El resultado debe poder **copiarse y pegarse directamente** sin perder el formato Markdown
 
 📌 El contenido debe estar **estructurado**, **legible** y listo para guardarse como `.md` sin edición adicional.
+
+📌 Guárdalo como un archivo `.md` y compárteme el archivo directamente 
 """
     return prompt
 
