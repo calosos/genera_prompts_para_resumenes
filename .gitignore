@@ -46,6 +46,9 @@ subtitulos.json
 # Ignorar todo el contenido de salida_descarga y salida_procesados,
 # pero mantener las carpetas en el repo
 
+salida_crea_archivos/*
+!salida_crea_archivos/.placeholder
+
 salida_descarga/*
 !salida_descarga/.placeholder
 
