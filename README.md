@@ -94,35 +94,9 @@ descarga_info/
 
 ---
 
-## 📊 Diagrama del flujo del sistema
+## 🖼️ Diagrama visual del sistema
 
-```plantuml
-@startuml
-start
-:Usuario ejecuta main.py;
-:Se muestra menú;
-if (¿Opción 1?) then (Sí)
-  :guardar cookies;
-else
-  :cargar cookies;
-  :extraer contenido;
-  :procesar contenido;
-  :mostrar subtítulos;
-  :esperar edición;
-  :aplicar jerarquía;
-  :guardar archivo final;
-  :confirmar edición manual;
-  if (confirmado) then (sí)
-    :ingresar base y letra;
-    :generar script .sh;
-  else
-    :omitir generación de .sh;
-  endif
-  :generar prompts;
-endif
-stop
-@enduml
-```
+![Diagrama del sistema](docs/Diagrama_Proyecto.png)
 
 ---
 
