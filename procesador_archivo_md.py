@@ -73,7 +73,7 @@ def procesar_contenido(contenido):
     r"^•Calificación:.*$",
     r"^Guía de estudio\: .*$",
     r"^Revisión\:.*$",
-    r"^. Haz clic para reanudar\.$",
+    r"^. Haz clic para .*$",
     r"^Cuestionario pr.ctico\: .*$",
     r"^Tarea de práctica•.*$",
     r"^Tarea calificada•.*$",
@@ -103,6 +103,7 @@ def guardar_contenido_limpio(nombre_archivo_original, contenido_limpio):
         f.write(contenido_limpio)
     print(f"✅ Contenido limpio guardado en: {nombre_procesado}")
     return nombre_procesado
+
 
 def mostrar_subtitulos_detectados():
     subtitulos = cargar_subtitulos_json()
