@@ -1,17 +1,20 @@
-# 📘 Proyecto: Descarga, Procesamiento y Generación de Prompts desde Coursera
 
-Este proyecto automatiza la descarga de contenido desde Coursera y genera prompts en formato Markdown a partir de la estructura jerarquizada del contenido de las lecciones.
+# 📘 Proyecto: Descarga y Generación de Prompts desde Coursera
+
+Este proyecto automatiza la descarga de lecciones de Coursera usando Selenium, limpia el contenido para estructurarlo en Markdown jerárquico y genera archivos `.md` listos para ser usados como prompts o material de estudio. Además, permite generar scripts `.sh` con nombres estructurados para facilitar la creación de archivos en lote.
 
 ---
 
 ## 🚀 ¿Qué hace este proyecto?
 
-1. Inicia sesión en Coursera (manual) y guarda cookies para futuras sesiones.
-2. Descarga el contenido HTML de una lección seleccionada.
-3. Limpia el contenido eliminando líneas innecesarias (duraciones, botones, etiquetas).
-4. Permite editar subtítulos que definen la jerarquía de secciones.
-5. Aplica estructura Markdown jerarquizada a partir de esos subtítulos.
-6. Genera archivos `.md` con prompts para crear cheat sheets a partir del contenido estructurado.
+1. Inicia sesión manual en Coursera y guarda cookies.
+2. Descarga contenido limpio de una lección desde una URL.
+3. Elimina basura visual como botones, instrucciones redundantes o calificaciones.
+4. Aplica jerarquía Markdown con `##` y `###` en base a subtítulos definidos.
+5. Permite editar manualmente el archivo jerarquizado generado.
+6. Muestra el contenido actualizado y confirma si fue modificado correctamente.
+7. Genera un archivo `.sh` con nombres jerárquicos basados en los temas y subtópicos.
+8. Genera prompts en formato Markdown listos para usarse o completarse.
 
 ---
 
@@ -19,10 +22,11 @@ Este proyecto automatiza la descarga de contenido desde Coursera y genera prompt
 
 - Python 3.8+
 - Google Chrome
-- ChromeDriver (https://chromedriver.chromium.org/)
-- Paquetes: selenium
+- ChromeDriver (instalado y accesible desde el PATH)
+- Paquetes Python:
+  - selenium
 
-Instalación de dependencias:
+Instala las dependencias:
 
 ```bash
 pip install -r requirements.txt
@@ -40,94 +44,94 @@ python main.py
 
 Elige una opción:
 
-    1: Iniciar sesión manual en Coursera y guardar cookies.
-    2: Usar cookies y pegar la URL de una lección para procesarla.
-
-Revisa y edita `subtitulos.json` si deseas cambiar la jerarquía de secciones.
-
-Presiona Enter para aplicar la jerarquía y generar los prompts.
+1. Iniciar sesión manual en Coursera y guardar cookies.
+2. Usar cookies y pegar la URL de una lección para procesarla.
 
 ---
 
-## 🧱 Estructura de carpetas
+## 📋 Flujo de procesamiento completo
+
+1. Se descarga el contenido de la lección como `.md`.
+2. Se limpia automáticamente (eliminando texto irrelevante).
+3. Se aplica una jerarquía Markdown con encabezados `##` y `###`.
+4. Se guarda un archivo jerarquizado editable (`salida_limpia/`).
+5. El sistema pausa para permitir edición manual del archivo jerarquizado.
+6. Se muestra el contenido actualizado en consola.
+7. Si el usuario confirma la edición:
+   - Se solicita un identificador numérico y letra de módulo.
+   - Se genera automáticamente un archivo `.sh` con nombres jerárquicos tipo:
+     ```
+     3a1_Antes_de_Control_de_version.md
+     3a1a_Introduccion_al_modulo.md
+     ...
+     ```
+   - El `.sh` se guarda en la carpeta `salida_crea_archivos/` con nombre derivado del módulo, por ejemplo:
+     ```
+     introduccion_al_control_de_versiones.sh
+     ```
+
+8. Finalmente, se generan automáticamente los prompts `.md` para cada tema y subtópico, guardados en `prompts_generados/`.
+
+---
+
+## 🧱 Estructura del proyecto
 
 ```
 descarga_info/
-├── main.py
-├── coursera_utils.py
-├── flujo_procesamiento.py
-├── procesador_archivo_md.py
-├── genera_prompts_desde_archivo.py
-├── subtitulos.json
-├── salida_descarga/
-├── salida_procesados/
-├── salida_limpia/
-├── prompts_generados/
+├── main.py                       ← Script principal
+├── coursera_utils.py            ← Login, cookies, extracción con Selenium
+├── flujo_procesamiento.py       ← Orquesta limpieza + jerarquía + generación
+├── procesador_archivo_md.py     ← Limpieza y estructura Markdown
+├── genera_prompts_desde_archivo.py ← Genera prompts desde Markdown jerarquizado
+├── generador_script_nombres.py  ← Genera .sh con nombres jerárquicos
+├── salida_descarga/             ← Archivos descargados crudos
+├── salida_procesados/           ← Contenido limpio sin jerarquía
+├── salida_limpia/               ← Contenido jerarquizado final
+├── salida_crea_archivos/        ← Script .sh para crear archivos jerárquicos
+├── prompts_generados/           ← Archivos .md tipo prompt
+└── subtitulos.json              ← Define los encabezados que marcan jerarquía
 ```
 
 ---
 
 ## 📊 Diagrama del flujo del sistema
 
+```plantuml
+@startuml
+start
+:Usuario ejecuta main.py;
+:Se muestra menú;
+if (¿Opción 1?) then (Sí)
+  :guardar cookies;
+else
+  :cargar cookies;
+  :extraer contenido;
+  :procesar contenido;
+  :mostrar subtítulos;
+  :esperar edición;
+  :aplicar jerarquía;
+  :guardar archivo final;
+  :confirmar edición manual;
+  if (confirmado) then (sí)
+    :ingresar base y letra;
+    :generar script .sh;
+  else
+    :omitir generación de .sh;
+  endif
+  :generar prompts;
+endif
+stop
+@enduml
 ```
-┌────────────────────┐
-│ Usuario elige opción│
-└────────┬───────────┘
-         ▼
-┌──────────────────────────────┐
-│ Opción 1: Login manual       │
-│  ↳ Guarda cookies en JSON    │
-└────────────┬────────────────┘
-             │
-             ▼
-┌──────────────────────────────┐
-│ Opción 2: Cargar cookies      │
-│  ↳ Pide URL de lección        │
-└────────────┬────────────────┘
-             ▼
-┌──────────────────────────────┐
-│ Extrae contenido del sitio   │
-│ Guarda en salida_descarga/  │
-└────────────┬────────────────┘
-             ▼
-┌──────────────────────────────┐
-│ Limpieza del contenido       │
-│  ↳ Elimina basura            │
-│  ↳ Guarda limpio             │
-│    en salida_procesados/     │
-└────────────┬────────────────┘
-             ▼
-┌──────────────────────────────┐
-│ Muestra subtítulos actuales  │
-│ Espera edición manual        │
-└────────────┬────────────────┘
-             ▼
-┌──────────────────────────────┐
-│ Aplica jerarquía Markdown    │
-│ Guarda archivo final         │
-└────────────┬────────────────┘
-             ▼
-┌──────────────────────────────┐
-│ Genera prompts Markdown      │
-│ Guarda en prompts_generados/ │
-└──────────────────────────────┘
-```
-
----
-
-## ✍️ Personalización
-
-- Edita el archivo `subtitulos.json` para definir los títulos o secciones que deben convertirse en `##` o `###`.
-- Puedes modificar `procesador_archivo_md.py` o `genera_prompts_desde_archivo.py` para ajustar el formato de jerarquía o los prompts generados.
 
 ---
 
 ## 🛡️ Licencia
 
-Este proyecto es de uso libre para propósitos educativos o personales.
+Este proyecto es de uso libre para fines educativos o personales.
 
 ---
 
 ## 🤝 Contribuciones
 
-¡Sugerencias, mejoras o PRs son bienvenidos!
+¡Sugerencias, mejoras o pull requests son bienvenidos!
