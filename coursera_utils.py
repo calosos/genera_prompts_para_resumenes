@@ -6,6 +6,8 @@ from urllib.parse import urlparse
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 CHROME_DRIVER_PATH = "/usr/bin/chromedriver"  # ⬅️ Reemplaza esto por tu ruta real
 COOKIES_FILE = "coursera_cookies.json"
@@ -72,13 +74,100 @@ def expandir_secciones(driver):
         print(f"⚠️ Error al buscar o expandir secciones: {e}")
 
 
-def extraer_contenido(driver, url):
-    try:
-        driver.get(url)
-        time.sleep(5)
-        cerrar_modal_traduccion(driver)
+def preparar_pagina(driver, url, expandir=False):
+    """
+    Navega a la URL, espera que cargue y cierra el modal si existe.
+    Si expandir=True, también expande las secciones colapsadas.
+    """
+    driver.get(url)
+    time.sleep(5)
+    cerrar_modal_traduccion(driver)
+    if expandir:
         expandir_secciones(driver)
         time.sleep(2)
+
+
+def preparar_pagina_leccion(driver, url, ):
+    """
+    Navega a la URL, espera que cargue y cierra el modal si existe.
+    Si expandir=True, también expande las secciones colapsadas.
+    """
+    driver.get(url)
+    time.sleep(5)
+    cerrar_modal_traduccion(driver)
+
+
+def extraer_temas_colapsados(driver):
+    """
+    Extrae los títulos visibles de los temas principales colapsados desde botones de Coursera.
+    Omite líneas como 'Complete' o estados.
+    """
+    try:
+        time.sleep(2)
+        botones = driver.find_elements(By.XPATH, "//button")
+
+        temas = []
+        for b in botones:
+            texto = b.text.strip()
+            if not texto:
+                continue
+
+            lineas = texto.splitlines()
+            if lineas:
+                titulo = lineas[0].strip()
+                if titulo and titulo not in temas:
+                    temas.append(titulo)
+
+
+
+        # quito el número de modulo, un identificador que tiene , el titulo principal y mostrar objetivos
+        temas_limpios = temas[4:]
+
+        return temas_limpios
+
+    except Exception as e:
+        print(f"❌ Error al extraer temas colapsados: {e}")
+        return []
+
+
+def extraer_temas_principales(driver, url):
+    """
+    Devuelve una lista con los títulos principales colapsados de la lección.
+    """
+    try:
+        preparar_pagina(driver, url, expandir=False)
+        temas_principales = extraer_temas_colapsados(driver)
+
+        return temas_principales
+
+    except Exception as e:
+        print(f"❌ Error al extraer temas principales: {e}")
+        return []
+
+
+def extraer_contenido_completo_leccion(driver, url):
+    """
+    Devuelve el contenido completo visible en <main> de la lección.
+    """
+    try:
+        preparar_pagina_leccion(driver, url)
+
+        # Espera hasta que <main> esté presente y estable
+        main_tag = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.TAG_NAME, "main"))
+        )
+        return main_tag.text
+
+    except Exception as e:
+        return f"⚠️ No se pudo extraer el contenido: {e}"
+
+
+def extraer_contenido_completo(driver, url):
+    """
+    Devuelve el contenido completo visible en <main> del midulo.
+    """
+    try:
+        preparar_pagina(driver, url, expandir=True)
         contenido = driver.find_element(By.TAG_NAME, "main").text
         return contenido
     except Exception as e:

@@ -108,7 +108,7 @@ def guardar_contenido_limpio(nombre_archivo_original, contenido_limpio):
 def mostrar_subtitulos_detectados():
     subtitulos = cargar_subtitulos_json()
     print("\n📌 Puedes editar el archivo 'subtitulos.json' si deseas ajustar los encabezados.")
-    print("📄 Subtítulos detectados actualmente:")
+    print("\n📄 Subtítulos detectados actualmente:")
     for st in subtitulos:
         print(f"- {st}")
     return subtitulos

@@ -60,3 +60,8 @@ salida_limpia/*
 
 prompts_generados/*
 !prompts_generados/.placeholder
+
+# Archivos de entorno
+.env
+.env.*.local
+*.env

@@ -1,40 +1,48 @@
+# 📘 Proyecto: Descarga, Limpieza y Resumen de Lecciones Coursera
 
-# 📘 Proyecto: Descarga y Generación de Prompts desde Coursera
-
-Este proyecto automatiza la descarga de lecciones de Coursera usando Selenium, limpia el contenido para estructurarlo en Markdown jerárquico y genera archivos `.md` listos para ser usados como prompts o material de estudio. Además, permite generar scripts `.sh` con nombres estructurados para facilitar la creación de archivos en lote.
+Este proyecto automatiza la descarga de lecciones desde Coursera usando Selenium, limpia el contenido HTML, lo transforma en archivos Markdown jerárquicos, permite generar prompts y ahora también resume automáticamente las lecciones utilizando modelos de lenguaje.
 
 ---
 
 ## 🚀 ¿Qué hace este proyecto?
 
-1. Inicia sesión manual en Coursera y guarda cookies.
-2. Descarga contenido limpio de una lección desde una URL.
-3. Elimina basura visual como botones, instrucciones redundantes o calificaciones.
-4. Aplica jerarquía Markdown con `##` y `###` en base a subtítulos definidos.
-5. Permite editar manualmente el archivo jerarquizado generado.
-6. Muestra el contenido actualizado y confirma si fue modificado correctamente.
-7. Genera un archivo `.sh` con nombres jerárquicos basados en los temas y subtópicos.
-8. Genera prompts en formato Markdown listos para usarse o completarse.
+- Inicia sesión manual en Coursera y guarda cookies reutilizables.
+- Descarga el contenido visible de una lección desde su URL.
+- Elimina elementos molestos como botones, instrucciones redundantes y traducciones automáticas.
+- Extrae automáticamente el título de la lección en español o inglés.
+- Limpia y estructura la transcripción principal del video.
+- Genera un resumen automático del contenido extraído.
+- Aplica jerarquía Markdown (`##`, `###`) con base en subtítulos.
+- Permite la edición manual del archivo jerarquizado.
+- Genera scripts `.sh` con nombres jerárquicos para crear archivos fácilmente.
+- Crea prompts Markdown a partir de cada tema/subtema procesado.
 
 ---
 
 ## 🧰 Requisitos
 
-- Python 3.8+
-- Google Chrome
-- ChromeDriver (instalado y accesible desde el PATH)
-- Paquetes Python:
-  - selenium
+- Python 3.8 o superior
+- Google Chrome + ChromeDriver
+- Archivo `.env` con la clave de API de OpenAI:
 
-Instala las dependencias:
+```env
+OPENAI_API_KEY=sk-...
+```
+
+### 📦 Instalación de paquetes
 
 ```bash
 pip install -r requirements.txt
 ```
 
+Incluye:
+- `selenium`
+- `openai`
+- `python-dotenv`
+
 ---
 
-## 🧑‍💻 ¿Cómo usarlo?
+## 🧑‍💻 ¿Cómo se usa?
 
 Ejecuta el script principal:
 
@@ -42,70 +50,85 @@ Ejecuta el script principal:
 python main.py
 ```
 
-Elige una opción:
+Selecciona una opción:
 
-1. Iniciar sesión manual en Coursera y guardar cookies.
-2. Usar cookies y pegar la URL de una lección para procesarla.
+1. Guardar cookies (inicia sesión manualmente)
+2. Extraer y procesar contenido jerárquico
+3. Extraer, limpiar y generar resumen de la lección
 
 ---
 
 ## 📋 Flujo de procesamiento completo
 
-1. Se descarga el contenido de la lección como `.md`.
-2. Se limpia automáticamente (eliminando texto irrelevante).
-3. Se aplica una jerarquía Markdown con encabezados `##` y `###`.
-4. Se guarda un archivo jerarquizado editable (`salida_limpia/`).
-5. El sistema pausa para permitir edición manual del archivo jerarquizado.
-6. Se muestra el contenido actualizado en consola.
-7. Si el usuario confirma la edición:
-   - Se solicita un identificador numérico y letra de módulo.
-   - Se genera automáticamente un archivo `.sh` con nombres jerárquicos tipo:
-     ```
-     3a1_Antes_de_Control_de_version.md
-     3a1a_Introduccion_al_modulo.md
-     ...
-     ```
-   - El `.sh` se guarda en la carpeta `salida_crea_archivos/` con nombre derivado del módulo, por ejemplo:
-     ```
-     introduccion_al_control_de_versiones.sh
-     ```
+### 🔹 Opción 2 – Procesamiento
 
-8. Finalmente, se generan automáticamente los prompts `.md` para cada tema y subtópico, guardados en `prompts_generados/`.
+1. Extrae el contenido `<main>` desde Coursera.  
+2. Elimina contenido irrelevante (controles, botones, etc.).  
+3. Extrae subtítulos principales.  
+4. Aplica jerarquía Markdown.  
+5. Permite edición manual del archivo.  
+6. Genera un script `.sh` con nombres jerárquicos, por ejemplo:
+
+```bash
+3a1_Tema.md
+3a1a_Subtema.md
+```
+
+7. Genera archivos `.md` tipo prompt.
 
 ---
 
-## 🧱 Estructura del proyecto
+### 🔹 Opción 3 – Resumen
+
+1. Extrae el contenido y transcripción desde `<main>`.  
+2. Detecta automáticamente el título de la lección.  
+3. Envía el contenido limpio al modelo de OpenAI.  
+4. Genera y guarda un archivo `.md` como:
+
+```
+resumenes_generados/resumen_Writing_the_Script_2025-05-02_230152.md
+```
+
+---
+
+## 📂 Estructura del proyecto
 
 ```
 descarga_info/
-├── main.py                       ← Script principal
-├── coursera_utils.py            ← Login, cookies, extracción con Selenium
-├── flujo_procesamiento.py       ← Orquesta limpieza + jerarquía + generación
-├── procesador_archivo_md.py     ← Limpieza y estructura Markdown
-├── genera_prompts_desde_archivo.py ← Genera prompts desde Markdown jerarquizado
-├── generador_script_nombres.py  ← Genera .sh con nombres jerárquicos
-├── salida_descarga/             ← Archivos descargados crudos
-├── salida_procesados/           ← Contenido limpio sin jerarquía
-├── salida_limpia/               ← Contenido jerarquizado final
-├── salida_crea_archivos/        ← Script .sh para crear archivos jerárquicos
-├── prompts_generados/           ← Archivos .md tipo prompt
-└── subtitulos.json              ← Define los encabezados que marcan jerarquía
+├── main.py                            ← Script principal (menú y orquestación)
+├── coursera_utils.py                 ← Extracción HTML, manejo de cookies, Selenium
+├── flujo_procesamiento.py           ← Limpieza, jerarquía, generación .sh
+├── procesador_archivo_md.py         ← Limpieza y reestructuración Markdown
+├── genera_prompts_desde_archivo.py  ← Crea prompts por sección
+├── generador_script_nombres.py      ← Genera scripts .sh jerárquicos
+├── procesar_texto_leccion.py        ← Limpia transcripción y extrae títulos
+├── agentes/
+│   └── agente_resumidor.py          ← Llama a OpenAI para generar resúmenes
+├── config.py                        ← Rutas de carpetas (`CARPETA_RESUMENES`)
+├── salida_descarga/                 ← Contenido crudo descargado
+├── salida_procesados/               ← Contenido limpio sin jerarquía
+├── salida_limpia/                   ← Contenido jerarquizado final
+├── salida_crea_archivos/            ← Script `.sh` para crear archivos
+├── prompts_generados/               ← Archivos `.md` tipo prompt
+├── resumenes_generados/             ← Resúmenes automáticos en Markdown
+└── subtitulos.json                  ← Define jerarquía de encabezados
 ```
 
 ---
 
-## 🖼️ Diagrama visual del sistema
+## 🖼️ Diagrama visual del flujo
 
-![Diagrama del sistema](docs/Diagrama_Proyecto.png)
+
+![Diagrama del sistema](docs/Diagrama_Proyecto_2.png)
 
 ---
 
 ## 🛡️ Licencia
 
-Este proyecto es de uso libre para fines educativos o personales.
+Uso libre para fines personales, educativos o de investigación.
 
 ---
 
 ## 🤝 Contribuciones
 
-¡Sugerencias, mejoras o pull requests son bienvenidos!
+¡Pull requests, mejoras, ideas y comentarios son bienvenidos!

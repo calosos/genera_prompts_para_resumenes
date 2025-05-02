@@ -53,3 +53,18 @@ def generar_script_nombres(ruta_archivo_md, base_id, letra_modulo, carpeta_salid
 
     print(f"✅ Script generado con {len(script_lines)} líneas en: {salida_script}")
     return salida_script
+
+if __name__ == '__main__':
+    print("🧪 Modo prueba: Generador de script desde archivo Markdown jerarquizado.")
+    ruta_archivo_md = input("📄 Ingresa la ruta del archivo .md jerarquizado: ").strip()
+    base_id = input("🔢 Ingresa el identificador base (por ejemplo 3): ").strip()
+    letra_modulo = input("🔠 Ingresa la letra del módulo (por ejemplo a): ").strip()
+
+    if not os.path.exists(ruta_archivo_md):
+        print("❌ El archivo proporcionado no existe.")
+    else:
+        generar_script_nombres(
+            ruta_archivo_md=ruta_archivo_md,
+            base_id=base_id,
+            letra_modulo=letra_modulo
+        )

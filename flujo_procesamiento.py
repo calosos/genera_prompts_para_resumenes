@@ -32,11 +32,13 @@ def procesar_archivo_guardado(nombre_archivo_original):
     ruta_salida = guardar_archivo_modificado(nombre_procesado, contenido_final)
 
     # 6. Permitir edición manual
+    print('\n')
     print('*'*50)
     print(f"\n📝 Puedes editar manualmente el archivo generado si lo deseas: \n")
     print('*' * 50)
-    print(f"📄 Archivo jerarquizado: {ruta_salida}")
-    input("✏️ Abre el archivo ahora. Presiona Enter cuando hayas terminado de editar...")
+    print('\n')
+    print(f"📄 Archivo jerarquizado: {ruta_salida}\n\n")
+    input("✏️ Edita el archivo para ajustar los subtemas. Presiona Enter cuando hayas terminado de editar...")
 
     # 7. Mostrar contenido editado
     print("\n📄 Contenido actual del archivo editado:\n" + "-"*50)
