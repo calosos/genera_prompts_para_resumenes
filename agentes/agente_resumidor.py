@@ -19,34 +19,41 @@ class AgenteResumidor:
             return None
 
         prompt = (
-            f"""Eres un asistente especializado en generar resúmenes técnicos claros, estructurados y amplios para apoyar exposiciones o clases.\n\n"
-Genera una resumen sobre el tema: {titulo}
-TEXTO A RESUMIR:
+            f"""
+Genera un resumen bien estructurado del siguiente contenido de una transcripción.
+TÍTULO: {titulo}
+TRANSCRIPCIÓN:
 {texto_original}
-\n📌 Asegúrate de incluir **al menos un ejemplo básico y uno avanzado a un nivel profesional** en cada sección técnica.
-📌 Conserva todo el código y usa la librería de openai 
----
+📌 Instrucciones:
+- Incluye el **título una sola vez** como encabezado Markdown, en el formato: `# [emoji] {titulo}`
+- Divide el contenido en secciones temáticas si aplica, usando subtítulos con formato Markdown (`##`) y emojis relevantes.
+- Conserva el **tono explicativo original**. No lo simplifiques en exceso.
+- **Evita repetir ideas o frases ya expresadas**. Resume de forma clara, sin redundancias.
+- **Crea ejemplos relevantes cuando no existan en el texto**. Cada sección técnica debe incluir:
+  - **Un ejemplo básico** y **uno avanzado de nivel profesional**.
+  - **Preferentemente con código** (en Python, usando buenas prácticas).
+- Los ejemplos deben estar en **párrafos explicativos completos**, e incluir bloques de código si corresponde.
+- Si el contenido lo permite, agrega **sugerencias prácticas, subtemas relevantes o ideas que amplíen la información** original.
 
-✅ El formato de salida debe cumplir los siguientes criterios:
-- Recuerda conservar todo el código
-- En **texto plano** (no usar canvas ni formato enriquecido)  
-- Con **sintaxis Markdown visible** (`#`, `*`, `-`, ```python)  
-- Con **emojis apropiados** en títulos o viñetas  
-- El resultado debe poder **copiarse y pegarse directamente** sin perder el formato Markdown
+✅ Formato de salida:
+- Solo **texto plano**. No usar Canvas ni formato enriquecido.
+- Usa sintaxis Markdown visible: `#`, `##`, `*`, `-`, y triple backtick para bloques de código (```python).
+- Usa **emojis apropiados** en títulos o subtítulos.
+- No dejes **espacios en blanco innecesarios** entre secciones o bloques.
+- El contenido debe estar **listo para guardarse como archivo `.md` sin edición adicional**.
+- El resultado debe poder **copiarse y pegarse directamente**, manteniendo el formato Markdown.
 
-📌 El contenido debe estar **estructurado**, **legible** y listo para guardarse como `.md` sin edición adicional.
         """
         )
-
         try:
             respuesta = openai.chat.completions.create(
                 model=MODELO_OPENAI,
                 messages=[
-                    {"role": "system", "content": "Eres un asistente experto en generar resúmenes técnicos amplios para clases y exposiciones."},
+                    {"role": "system", "content": "Eres un asistente experto en generar resúmenes técnicos para estudiar y exposiciones."},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.4,
-                max_tokens=1000
+                max_tokens=900
             )
 
             resumen = respuesta.choices[0].message.content.strip()
