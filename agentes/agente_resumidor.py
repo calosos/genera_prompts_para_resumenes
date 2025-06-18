@@ -30,8 +30,9 @@ TRANSCRIPCIÓN:
 - Conserva el **tono explicativo original**. No lo simplifiques en exceso.
 - **Evita repetir ideas o frases ya expresadas**. Resume de forma clara, sin redundancias.
 - **Crea ejemplos relevantes cuando no existan en el texto**. Cada sección técnica debe incluir:
-  - **Un ejemplo básico** y **uno avanzado de nivel profesional**.
-  - **Preferentemente con código** (en Python, usando buenas prácticas).
+  - **Un ejemplo básico** y **uno avanzado de nivel profesional **.
+  - **Preferentemente con código cuando aplique** (en Python, usando buenas prácticas).
+  - Si no aplica código python utiliza la herramienta que creas que se debe utilizar de acuerdo al contenito.
 - Los ejemplos deben estar en **párrafos explicativos completos**, e incluir bloques de código si corresponde.
 - Si el contenido lo permite, agrega **sugerencias prácticas, subtemas relevantes o ideas que amplíen la información** original.
 
@@ -45,15 +46,24 @@ TRANSCRIPCIÓN:
 
         """
         )
+        sytem_prompt = f"""
+ Actúa como un asistente experto en gestión del conocimiento. Quiero que transformes el siguiente texto en una nota **conceptual**, escrita en un formato claro y útil para repaso en Obsidian.
+ Aplica las siguientes reglas:
+
+ 1. Resume con lenguaje neutro, sin tono personal ni institucional.
+ 2. Destaca los **conceptos clave** y su aplicación práctica.
+ 3. Utiliza encabezados en estilo Markdown (`#`, `##`) para estructurar la nota.
+ 4. Omite frases promocionales, redundancias y llamadas a la acción innecesarias.
+"""
         try:
             respuesta = openai.chat.completions.create(
                 model=MODELO_OPENAI,
                 messages=[
-                    {"role": "system", "content": "Eres un asistente experto en generar resúmenes técnicos para estudiar y exposiciones."},
+                    {"role": "system", "content": sytem_prompt},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.4,
-                max_tokens=900
+                max_tokens=1300
             )
 
             resumen = respuesta.choices[0].message.content.strip()

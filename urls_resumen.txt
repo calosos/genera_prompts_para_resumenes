@@ -1,0 +1,14 @@
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/0Q4ck/overview-of-azure-services
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/9U6Rg/azure-service-categories
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/BekMQ/introduction-to-high-availability-in-azure
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/oG7u2/azure-availability-zones
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/aRt3o/azure-service-bus
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/miyB4/azure-logic-apps-orchestrating-workflows-in-the-cloud
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/4BoLT/module-summary-exploring-core-azure-services
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/MPVEd/introduction-to-azure-resource-manager
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/52Cku/azure-resource-manager-template-use-cases
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/uchiA/introduction-to-azure-policy
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/O0bky/implementing-azure-policies-at-scale
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/yxbKb/introduction-to-azure-monitor
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/tuzlU/advanced-monitoring-components-with-azure-monitor
+https://www.coursera.org/learn/essentials-with-azure-fundamentals/lecture/xuikI/module-summary-azure-management-and-governance

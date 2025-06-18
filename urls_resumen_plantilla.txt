@@ -1,0 +1,8 @@
+# Instrucciones:
+# - Escribe una URL de lección de Coursera por línea.
+# - Asegúrate de que sea una lección (con /lecture/ o contenido equivalente).
+# - Las líneas que empiezan con # son ignoradas.
+
+https://www.coursera.org/learn/python-crash-course/lecture/abc123
+https://www.coursera.org/learn/python-crash-course/lecture/def456
+# https://www.coursera.org/learn/python-crash-course/home/module/2 ← Esto no se recomienda

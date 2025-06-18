@@ -117,14 +117,66 @@ def opcion_extraer_y_procesar_contenido(url_manual=None):
     archivo = guardar_contenido_extraido(url, contenido)
     procesar_archivo_guardado(archivo)
 
+def opcion_resumir_multiples_lecciones(lista_urls):
+    driver, _ = preparar_driver_y_url(url_manual="https://www.coursera.org")  # Reutilizamos para login + cookies
+    if not driver:
+        return
+
+    for url in lista_urls:
+        try:
+            print(f"\n🔍 Procesando: {url}")
+            contenido = extraer_contenido_completo_leccion(driver, url)
+            transcripcion = extraer_transcripcion(contenido)
+            titulo = obten_titulo(contenido)
+            resumen = AgenteResumidor.resumir_contenido(transcripcion, titulo)
+
+            if not resumen:
+                print(f"⚠️ No se pudo generar resumen para: {titulo}")
+                continue
+
+            fecha_hora = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+            titulo_limpio = re.sub(r"[^\w\-]+", "_", titulo.strip())
+            ruta_resumen = CARPETA_RESUMENES / f"resumen_{titulo_limpio}_{fecha_hora}.md"
+            ruta_resumen.parent.mkdir(parents=True, exist_ok=True)
+
+            with open(ruta_resumen, "w", encoding="utf-8") as f:
+                f.write(f"# {titulo}\n\n{resumen}")
+
+            print(f"✅ Resumen guardado en: {ruta_resumen}")
+
+        except Exception as e:
+            print(f"❌ Error procesando {url}: {e}")
+
+    driver.quit()
+
+def leer_y_confirmar_urls(ruta="urls_resumen.txt"):
+    if not os.path.exists(ruta):
+        print(f"❌ No se encontró el archivo: {ruta}")
+        return None
+
+    print(f"\n📄 Contenido de {ruta}:")
+    with open(ruta, encoding="utf-8") as f:
+        urls = [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
+
+    for i, url in enumerate(urls, 1):
+        print(f"{i}. {url}")
+
+    confirmacion = input("\n¿El contenido es correcto? (s/n): ").strip().lower()
+    if confirmacion == "s":
+        return urls
+    else:
+        print("❌ Operación cancelada por el usuario.")
+        return None
+
 
 def mostrar_menu():
-    print("¿Qué deseas hacer?")
+    print("\n📘 Menú Principal")
     print("1. Guardar cookies (login manual)")
-    print("2. Usar cookies guardadas y extraer contenido")
-    print("3. Usar cookies guardadas y extraer contenido de una lección")
-
-    return input("Ingresa 1, 2 o 3: ").strip()
+    print("2. Extraer y procesar contenido de una lección")
+    print("3. Extraer y resumir contenido de una lección")
+    print("4. Extraer resúmenes de múltiples lecciones (archivo fijo: urls_resumen.txt)")
+    print("Q. Salir")
+    return input("Ingresa una opción (1-4 o Q): ").strip()
 
 
 def main_dos():
@@ -134,18 +186,23 @@ def main_dos():
 
 
 def main():
-    opcion = mostrar_menu()
+    while True:
+        opcion = mostrar_menu()
 
-    if opcion == "1":
-        driver = crear_driver()
-        opcion_guardar_cookies(driver)
-        driver.quit()
-    elif opcion == "2":
-        opcion_extraer_y_procesar_contenido()
-    elif opcion == "3":
-        opcion_extraer_y_resumir_contenido()
-    else:
-        print("❌ Opción no válida.")
+        if opcion == "1":
+            driver = crear_driver()
+            opcion_guardar_cookies(driver)
+            driver.quit()
+        elif opcion == "2":
+            opcion_extraer_y_procesar_contenido()
+        elif opcion == "3":
+            opcion_extraer_y_resumir_contenido()
+        elif opcion == "4":
+            urls = leer_y_confirmar_urls()
+            if urls:
+                opcion_resumir_multiples_lecciones(urls)
+        else:
+            print("❌ Opción no válida. Intenta de nuevo.")
 
 
 if __name__ == "__main__":
